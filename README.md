@@ -17,7 +17,7 @@ Made in java with JDA and JDA-utils. Not yet 24/7.
 ### Coming Soon Features
 - [ ] Improve Buttons and Dropboxes
 - [ ] Create game commands
-- [ ] Add more commands
+- [x] Improve Welcome Command
 
 ### Credits
 ```
