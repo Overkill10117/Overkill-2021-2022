@@ -1,4 +1,4 @@
-# Overkill-2021-2022
+# Overkill10117
 Made by Overkill. This is the second version of [Overkill Bot](https://github.com/Overkill10117/Overkill). 
 Made in java with JDA and JDA-utils. Not yet 24/7.
 
