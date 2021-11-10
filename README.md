@@ -24,3 +24,5 @@ Made in java with JDA and JDA-utils. Not yet 24/7.
 Overkill10117
 Doom360
 ```
+# READ LICENSE
+https://github.com/Overkill10117/Overkill-2021-2022/blob/master/LICENSE
