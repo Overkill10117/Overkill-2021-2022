@@ -52,6 +52,6 @@ public class ModsCommand implements ICommand {
 
     @Override
     public CommandType getCategory() {
-        return CommandType.MOD;
+        return CommandType.INFO;
     }
 }

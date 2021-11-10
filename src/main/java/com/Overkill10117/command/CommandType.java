@@ -4,5 +4,6 @@ public enum CommandType {
     MUSIC,
     MOD,
     GENERAL,
-    FUN
+    FUN,
+    INFO
 }

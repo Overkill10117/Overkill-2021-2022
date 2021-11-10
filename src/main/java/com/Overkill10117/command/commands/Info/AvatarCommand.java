@@ -45,12 +45,12 @@ public class AvatarCommand implements ICommand {
 
     @Override
     public String getHelp() {
-        return "avatar [metion]";
+        return "avatar [mention]";
     }
 
     @Override
     public CommandType getCategory() {
-        return CommandType.MOD;
+        return CommandType.INFO;
     }
 }
 

@@ -48,7 +48,8 @@ public class HelpCommand implements ICommand {
                             Button.secondary(ctx.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                             Button.secondary(ctx.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                             Button.secondary(ctx.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                            Button.secondary(ctx.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)))).queue();
+                            Button.secondary(ctx.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                            Button.secondary(ctx.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
             return;
         }
 

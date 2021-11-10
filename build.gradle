@@ -4,7 +4,7 @@ plugins {
     id'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
-mainClassName = 'com/Overkill10117/Bot'
+mainClassName = 'com.Overkill10117.Bot'
 version '1.0'
 sourceCompatibility = 11
 targetCompatibility = 11
@@ -34,7 +34,7 @@ repositories {
 
 jar {
     manifest {
-        attributes "Main-Class": "com/Overkill10117/Bot"
+        attributes "Main-Class": "com.Overkill10117.Bot"
     }
 
     from {
