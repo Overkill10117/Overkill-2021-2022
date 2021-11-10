@@ -24,11 +24,11 @@ public class Bot {
 
 
     private Bot() throws LoginException {
-        WebUtils.setUserAgent("I am a bot");
+        WebUtils.setUserAgent("Overkill10117");
         EmbedUtils.setEmbedBuilder(
                 () -> new EmbedBuilder()
                         .setColor(0x3883d9)
-                        .setFooter("lol")
+                        .setFooter("type ,help")
         );
 
 
@@ -55,7 +55,7 @@ public class Bot {
                 .addEventListeners(new OnSelectionMenu())
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .setChunkingFilter(ChunkingFilter.ALL)
-                .setActivity(Activity.playing("Minecraft || type ,help"))
+                .setActivity(Activity.playing("Being Programmed || type ,help"))
                 .build();
     }
 
