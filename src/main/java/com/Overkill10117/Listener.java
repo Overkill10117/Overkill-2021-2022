@@ -56,7 +56,19 @@ public class Listener extends ListenerAdapter {
         String name = event.getMember().getEffectiveName().replace(" ", "%20");
         String guildName = event.getGuild().getName().replace(" ", "+");
         String pngUrl = "https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/773868615636222003/907439760363126794/stars-flag-costume-comic-stars-hd-wallpaper-preview.png&text1=" + name + "&text2=Welcome+To+" + guildName + "&text3=" + event.getGuild().getMembers().size() + "th+Member&avatar=" + event.getUser().getEffectiveAvatarUrl();
-        event.getGuild().getDefaultChannel().sendMessage(pngUrl).queue();
+        String pngUrl1 = "https://api.popcat.xyz/welcomecard?background=https://media.discordapp.net/attachments/775266206357127179/907867171496030258/thumb-1920-200852.png&text1=" + name + "&text2=Welcome+To+" + guildName + "&text3=" + event.getGuild().getMembers().size() + "th+Member&avatar=" + event.getUser().getEffectiveAvatarUrl();
+        double meh = Math.random()*10;
+
+        switch ((int) meh) {
+            case 1:
+                event.getGuild().getDefaultChannel().sendMessage(pngUrl).queue();
+                return;
+            case 2:
+                event.getGuild().getDefaultChannel().sendMessage(pngUrl1).queue();
+                return;
+            default:
+                event.getGuild().getDefaultChannel().sendMessage(pngUrl).queue();
+        }
     }
 
     @Override
