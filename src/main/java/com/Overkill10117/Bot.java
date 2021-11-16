@@ -1,5 +1,6 @@
 package com.Overkill10117;
 
+import com.Overkill10117.command.commands.Beta.SlashCommands;
 import com.Overkill10117.command.commands.Events.OnButtonClick;
 import com.Overkill10117.command.commands.Events.OnSelectionMenu;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
@@ -53,6 +54,7 @@ public class Bot {
                 .addEventListeners(new Listener(waiter), waiter)
                 .addEventListeners(new OnButtonClick())
                 .addEventListeners(new OnSelectionMenu())
+                .addEventListeners(new SlashCommands())
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setActivity(Activity.playing("Being Programmed || type ,help"))
