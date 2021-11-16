@@ -1,8 +1,5 @@
 package com.Overkill10117.command.commands.Beta;
 
-import com.Overkill10117.Config;
-import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
@@ -12,58 +9,10 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.requests.GatewayIntent;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
-
-import javax.security.auth.login.LoginException;
-import java.util.EnumSet;
-
-import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
 
 public class  SlashCommands extends ListenerAdapter
 {
-    public static void main(String[] args) throws LoginException
-    {
-        JDA jda = JDABuilder.createLight(Config.get("token"), EnumSet.noneOf(GatewayIntent.class)) // slash commands don't need any intents
-                .addEventListeners(new SlashCommands())
-                .build();
-
-        // These commands take up to an hour to be activated after creation/update/delete
-        CommandListUpdateAction commands = jda.updateCommands();
-
-        // Moderation commands with required options
-        commands.addCommands(
-                new CommandData("ban", "Ban a user from this server. Requires permission to ban users.")
-                        .addOptions(new OptionData(USER, "user", "The user to ban") // USER type allows to include members of the server or other users by id
-                                .setRequired(true)) // This command requires a parameter
-                        .addOptions(new OptionData(INTEGER, "del_days", "Delete messages from the past days.")) // This is optional
-        );
-
-        // Simple reply commands
-        commands.addCommands(
-                new CommandData("say", "Makes the bot say what you tell it to")
-                        .addOptions(new OptionData(STRING, "content", "What the bot should say")
-                                .setRequired(true))
-        );
-
-        // Commands without any inputs
-        commands.addCommands(
-                new CommandData("leave", "Make the bot leave the server")
-        );
-
-        commands.addCommands(
-                new CommandData("prune", "Prune messages from this channel")
-                        .addOptions(new OptionData(INTEGER, "amount", "How many messages to prune (Default 100)"))
-        );
-
-        // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
-        commands.queue();
-    }
-
-
     @Override
     public void onSlashCommand(SlashCommandEvent event)
     {

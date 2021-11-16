@@ -12,7 +12,11 @@ import com.Overkill10117.command.commands.Mod.PollCommand;
 import com.Overkill10117.command.commands.Mod.ReactionRoleCommand;
 import com.Overkill10117.command.commands.Music.*;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.commands.build.CommandData;
+import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -21,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static net.dv8tion.jda.api.interactions.commands.OptionType.*;
+import static net.dv8tion.jda.api.interactions.commands.OptionType.INTEGER;
 
 public class CommandManager {
     private final List<ICommand> commands = new ArrayList<>();
@@ -55,6 +62,32 @@ public class CommandManager {
         addCommand(new RepeatCommand());
         addCommand(new SkipCommand());
         addCommand(new StopCommand());
+        Bot.commands.addCommands(
+                new CommandData("ban", "Ban a user from this server. Requires permission to ban users.")
+                        .addOptions(new OptionData(USER, "user", "The user to ban") // USER type allows to include members of the server or other users by id
+                                .setRequired(true)) // This command requires a parameter
+                        .addOptions(new OptionData(INTEGER, "del_days", "Delete messages from the past days.")) // This is optional
+        );
+
+        // Simple reply commands
+        Bot.commands.addCommands(
+                new CommandData("say", "Makes the bot say what you tell it to")
+                        .addOptions(new OptionData(STRING, "content", "What the bot should say")
+                                .setRequired(true))
+        );
+
+        // Commands without any inputs
+        Bot.commands.addCommands(
+                new CommandData("leave", "Make the bot leave the server")
+        );
+
+        Bot.commands.addCommands(
+                new CommandData("prune", "Prune messages from this channel")
+                        .addOptions(new OptionData(INTEGER, "amount", "How many messages to prune (Default 100)"))
+        );
+
+        // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
+        Bot.commands.queue();
     }
 
     private void addCommand(ICommand cmd) {

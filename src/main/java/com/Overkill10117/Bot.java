@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import net.dv8tion.jda.api.utils.ChunkingFilter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
@@ -21,10 +22,14 @@ import java.util.EnumSet;
 public class Bot {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static JDA jda;
+    public static CommandListUpdateAction commands;
 
 
     private Bot() throws LoginException {
+        JDA jda = JDABuilder.createLight(Config.get("token"), EnumSet.noneOf(GatewayIntent.class))
+                .addEventListeners(new SlashCommands())
+                .build();// slash commands don't need any intents;
+        commands = jda.updateCommands();
         WebUtils.setUserAgent("Overkill10117");
         EmbedUtils.setEmbedBuilder(
                 () -> new EmbedBuilder()
