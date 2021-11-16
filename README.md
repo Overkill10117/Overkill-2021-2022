@@ -13,10 +13,14 @@ Made in java with JDA and JDA-utils. Not yet 24/7.
 | ------------- | ------------- |
 | More Commands  | Improved Commands  |
 | Outdated  | Updated  |
+| ✖️  | Slash Commands  |
+| ✖️  | Buttons  |
+
 
 ### Coming Soon Features
 - [ ] Improve Buttons and Dropboxes
 - [ ] Create game commands
+- [ ] Slash Commands
 - [x] Improve Welcome Command
 
 ### Credits
