@@ -2,6 +2,8 @@
 Made by Overkill. This is the second version of [Overkill Bot](https://github.com/Overkill10117/Overkill). 
 Made in java with JDA and JDA-utils. Not yet 24/7.
 
+## [Invite My Bot Now!!](https://discord.com/api/oauth2/authorize?client_id=906076911904636948&permissions=0&scope=bot%20applications.commands)
+
 ## New Features
 1. Buttons
 2. New Help Command
