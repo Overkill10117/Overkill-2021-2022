@@ -53,6 +53,7 @@ public class CommandManager {
         addCommand(new InfoServerCommand());
         addCommand(new InfoUserCommand());
         addCommand(new ModsCommand());
+        addCommand(new FightCommand());
 
         addCommand(new JoinCommand());
         addCommand(new LeaveCommand());
@@ -84,6 +85,9 @@ public class CommandManager {
         Bot.commands.addCommands(
                 new CommandData("prune", "Prune messages from this channel")
                         .addOptions(new OptionData(INTEGER, "amount", "How many messages to prune (Default 100)"))
+        );
+        Bot.commands.addCommands(
+                new CommandData("spam", "Make the bot spam alot use this wisely or else...")
         );
 
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here

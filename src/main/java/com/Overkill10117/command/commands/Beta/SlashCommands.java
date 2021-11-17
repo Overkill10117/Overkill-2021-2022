@@ -1,33 +1,35 @@
 package com.Overkill10117.command.commands.Beta;
 
+import com.Overkill10117.command.CommandContext;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.Button;
 
-public class  SlashCommands extends ListenerAdapter
-{
+import java.util.List;
+import java.util.Objects;
+
+public class  SlashCommands extends ListenerAdapter {
+    private Object CommandContext;
+
     @Override
-    public void onSlashCommand(SlashCommandEvent event)
-    {
+    public void onSlashCommand(SlashCommandEvent event) {
         // Only accept commands from guilds
         if (event.getGuild() == null)
             return;
-        switch (event.getName())
-        {
+        switch (event.getName()) {
             case "ban":
                 Member member = event.getOption("user").getAsMember(); // the "user" option is required so it doesn't need a null-check here
                 User user = event.getOption("user").getAsUser();
                 ban(event, user, member);
                 break;
             case "say":
-                say(event, event.getOption("content").getAsString()); // content is required so no null-check here
+                say(event, Objects.requireNonNull(event.getOption("content")).getAsString()); // content is required so no null-check here
                 break;
             case "leave":
                 leave(event);
@@ -35,14 +37,17 @@ public class  SlashCommands extends ListenerAdapter
             case "prune": // 2 stage command with a button prompt
                 prune(event);
                 break;
+            case "spam":
+                Message message = (Message) Objects.requireNonNull(event.getOption("message")).getAsMessageChannel();
+                spam(event, Objects.requireNonNull(event.getOption("content")).getAsString(), message);
+                break;
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
         }
     }
 
     @Override
-    public void onButtonClick(ButtonClickEvent event)
-    {
+    public void onButtonClick(ButtonClickEvent event) {
         // users can spoof this id so be careful what you do with this
         String[] id = event.getComponentId().split(":"); // this is the custom id we specified in our button
         String authorId = id[0];
@@ -53,8 +58,7 @@ public class  SlashCommands extends ListenerAdapter
         event.deferEdit().queue(); // acknowledge the button was clicked, otherwise the interaction will fail
 
         MessageChannel channel = event.getChannel();
-        switch (type)
-        {
+        switch (type) {
             case "prune":
                 int amount = Integer.parseInt(id[2]);
                 event.getChannel().getIterableHistory()
@@ -67,26 +71,22 @@ public class  SlashCommands extends ListenerAdapter
         }
     }
 
-    public void ban(SlashCommandEvent event, User user, Member member)
-    {
+    public void ban(SlashCommandEvent event, User user, Member member) {
         event.deferReply(true).queue(); // Let the user know we received the command before doing anything else
         InteractionHook hook = event.getHook(); // This is a special webhook that allows you to send messages without having permissions in the channel and also allows ephemeral messages
         hook.setEphemeral(true); // All messages here will now be ephemeral implicitly
-        if (!event.getMember().hasPermission(Permission.BAN_MEMBERS))
-        {
+        if (!event.getMember().hasPermission(Permission.BAN_MEMBERS)) {
             hook.sendMessage("You do not have the required permissions to ban users from this server.").queue();
             return;
         }
 
         Member selfMember = event.getGuild().getSelfMember();
-        if (!selfMember.hasPermission(Permission.BAN_MEMBERS))
-        {
+        if (!selfMember.hasPermission(Permission.BAN_MEMBERS)) {
             hook.sendMessage("I don't have the required permissions to ban users from this server.").queue();
             return;
         }
 
-        if (member != null && !selfMember.canInteract(member))
-        {
+        if (member != null && !selfMember.canInteract(member)) {
             hook.sendMessage("This user is too powerful for me to ban.").queue();
             return;
         }
@@ -101,13 +101,15 @@ public class  SlashCommands extends ListenerAdapter
                 .queue();
     }
 
-    public void say(SlashCommandEvent event, String content)
-    {
+    public void say(SlashCommandEvent event, String content) {
         event.reply(content).queue(); // This requires no permissions!
+        if (content.isEmpty()) {
+            event.reply("What will I say??").queue();
+            event.reply("Usage: /say [word]").queue();
+        }
     }
 
-    public void leave(SlashCommandEvent event)
-    {
+    public void leave(SlashCommandEvent event) {
         if (!event.getMember().hasPermission(Permission.KICK_MEMBERS))
             event.reply("You do not have permissions to kick me.").setEphemeral(true).queue();
         else
@@ -116,8 +118,7 @@ public class  SlashCommands extends ListenerAdapter
                     .queue();
     }
 
-    public void prune(SlashCommandEvent event)
-    {
+    public void prune(SlashCommandEvent event) {
         OptionMapping amountOption = event.getOption("amount"); // This is configured to be optional so check for null
         int amount = amountOption == null
                 ? 100 // default 100
@@ -128,5 +129,126 @@ public class  SlashCommands extends ListenerAdapter
                         Button.secondary(userId + ":delete", "Nevermind!"),
                         Button.danger(userId + ":prune:" + amount, "Yes!")) // the first parameter is the component id we use in onButtonClick above
                 .queue();
+    }
+
+    public void spam(SlashCommandEvent event, String content, Message ctx) {
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+        event.reply(ctx.getContentRaw()).queue();
+
+
+
+
+
+
+
+
     }
 }
