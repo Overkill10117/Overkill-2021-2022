@@ -102,6 +102,8 @@ public class OnButtonClick extends ListenerAdapter {
                                         + "Parameter: `-h | [Number] @Mention(s)`\n"
                                         + "[Number]: Spam an amount of spams.\n"
                                         + "@Mention(s): Spam spams to mentioned member(s) in dm.\n", true)
+                                .addField(Config.get("prefix") + "fight", "Fights with user\n" +
+                                        "Usage: ,fight [person]", true)
 
 
                                 .setFooter("Type " + Config.get("prefix") + " help [command name] to see what they do")
@@ -145,8 +147,14 @@ public class OnButtonClick extends ListenerAdapter {
                 while (x<200) {
                     event.getChannel().sendMessageFormat("spam").queue();
                     x++;
+                    break;
                 }
-
+            case "spamm":
+                event.getChannel().sendMessage("spam").setActionRows(
+                        ActionRow.of(
+                                Button.secondary(event.getMember().getUser().getId() + ":spamm", "spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true))
+                        )
+                ).queue();
         }
     }
     }

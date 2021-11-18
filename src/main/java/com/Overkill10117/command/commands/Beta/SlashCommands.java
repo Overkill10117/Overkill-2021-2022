@@ -1,7 +1,10 @@
 package com.Overkill10117.command.commands.Beta;
 
+import Requests.OpenTDB;
 import com.Overkill10117.Config;
 import com.Overkill10117.command.CommandContext;
+import com.Overkill10117.command.commands.Fun.TriviaCommand;
+import com.Overkill10117.command.commands.Utils.UtilNum;
 import com.fasterxml.jackson.databind.JsonNode;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -9,6 +12,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -16,12 +20,19 @@ import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class  SlashCommands extends ListenerAdapter {
+    public static HashMap<User, String> storeAnswer = new HashMap<>();
+    public static HashMap<User, String> storeQuestion = new HashMap<>();
+    public static HashMap<User, String> storeDifficulty = new HashMap<>();
     private Object CommandContext;
 
     @Override
@@ -49,6 +60,9 @@ public class  SlashCommands extends ListenerAdapter {
                 break;
             case "meme":
                 meme(event);
+                break;
+            case "trivia":
+                trivia(event);
                 break;
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
@@ -144,16 +158,16 @@ public class  SlashCommands extends ListenerAdapter {
         final long guildID = event.getGuild().getIdLong();
         String prefix = Config.get("prefix");
 
-            EmbedBuilder embedBuilder = new EmbedBuilder();
-            embedBuilder.setTitle("Spam");
-            embedBuilder.setColor(Color.cyan);
-            embedBuilder.setDescription("click the button to spam");
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("Spam");
+        embedBuilder.setColor(Color.cyan);
+        embedBuilder.setDescription("click the button to spam");
 
-            event.replyEmbeds(embedBuilder.build()).addActionRows(
-                    ActionRow.of(
-                            net.dv8tion.jda.api.interactions.components.Button.secondary(event.getMember().getUser().getId() + ":spam", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
+        event.replyEmbeds(embedBuilder.build()).addActionRows(
+                ActionRow.of(
+                        net.dv8tion.jda.api.interactions.components.Button.secondary(event.getMember().getUser().getId() + ":spam", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
 
-            return;
+        return;
     }
 
     public void meme(SlashCommandEvent event) {
@@ -172,5 +186,91 @@ public class  SlashCommands extends ListenerAdapter {
 
             event.replyEmbeds(embed.build()).queue();
         });
+    }
+
+    public void trivia(SlashCommandEvent event) {
+        OpenTDB obj = new OpenTDB();
+
+        obj.getTrivia();
+
+        System.out.println(obj.getQuestion());
+        System.out.println(obj.getCorrectAnswer());
+
+        String[] incorrectAnswers = obj.incorrectAnswers;
+        for (int i = 0; i < obj.incorrectAnswers.length ; i++) {
+            System.out.println(obj.incorrectAnswers[i]);
+        }
+
+
+        SelectionMenu.Builder menu = SelectionMenu.create("menu:class")
+                .setPlaceholder("Choose the correct answer") // shows the placeholder indicating what this menu is for
+                .setRequiredRange(1, 1);
+
+        int x = 0;
+        ArrayList<String> arrayList = new ArrayList<>();
+
+        while (x < incorrectAnswers.length) {
+            arrayList.add(incorrectAnswers[x]);
+            x++;
+        }
+
+        x = 0;
+
+        arrayList.add(obj.getCorrectAnswer());
+        int size = arrayList.size();
+        while (x < size) {
+            int random = UtilNum.randomNum(0, size-1 - (x));
+            String choice = arrayList.get(random).replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
+            System.out.println(choice);
+
+            menu.addOption(choice, choice);
+            arrayList.remove(choice);
+
+            x++;
+        }
+
+        String msg = obj.getQuestion().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setTitle("Trivia!!!");
+        embedBuilder.addField("Category: ", obj.getCategory(), true);
+        embedBuilder.addField("Difficulty: ", obj.getDifficulty(), true);
+        embedBuilder.addField("Question: ", event.getUser().getAsMention() + " " + msg, false);
+        embedBuilder.setColor(Color.cyan);
+        event.replyEmbeds(embedBuilder.build()).addActionRow(menu.build()).queue();
+        storeQuestion.put(event.getUser(), msg);
+        storeDifficulty.put(event.getUser(), obj.getDifficulty());
+        storeAnswer.put(event.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
+    }
+    @Override
+    public void onSelectionMenu(@NotNull SelectionMenuEvent event) {
+        EmbedBuilder embedBuilder;
+        System.out.println(event.getSelectedOptions().get(0).getValue());
+        if (TriviaCommand.storeAnswer.containsKey(event.getUser())) {
+            String answer = TriviaCommand.storeAnswer.get(event.getUser());
+            String question = TriviaCommand.storeQuestion.get(event.getUser());
+            String difficulty = TriviaCommand.storeDifficulty.get(event.getUser());
+
+            if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
+                event.reply("Correct answer!!!!\n" +
+                        "You got \uD83E\uDE99for getting the correct answer!\n" +
+                        "Question: `" + question + "`").queue();
+                event.deferEdit().queue();
+                event.getMessage().delete().queue();
+                TriviaCommand.storeAnswer.remove(event.getUser());
+            } else {
+                EmbedBuilder e = new EmbedBuilder();
+                e.setTitle("Incorrect answer");
+                e.setFooter("A correct answer gives you \uD83E\uDE99 ");
+                e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
+                        "**\nThe correct answer is " + TriviaCommand.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
+                event.replyEmbeds(e.build()).queue();
+                event.getMessage().delete().queue();
+                TriviaCommand.storeAnswer.remove(event.getUser());
+                TriviaCommand.storeQuestion.remove(event.getUser());
+                TriviaCommand.storeDifficulty.remove(event.getUser());
+
+                event.deferEdit().queue();
+            }
+        }
     }
 }

@@ -63,6 +63,7 @@ public class CommandManager {
         addCommand(new RepeatCommand());
         addCommand(new SkipCommand());
         addCommand(new StopCommand());
+
         Bot.commands.addCommands(
                 new CommandData("ban", "Ban a user from this server. Requires permission to ban users.")
                         .addOptions(new OptionData(USER, "user", "The user to ban") // USER type allows to include members of the server or other users by id
@@ -92,6 +93,9 @@ public class CommandManager {
         );
         Bot.commands.addCommands(
                 new CommandData("meme", "meme")
+        );
+        Bot.commands.addCommands(
+                new CommandData("trivia", "trivia")
         );
 
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
