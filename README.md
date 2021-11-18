@@ -25,6 +25,9 @@ Made in java with JDA and JDA-utils. Not yet 24/7.
 - [ ] Slash Commands
 - [x] Improve Welcome Command
 
+# Remember:
+if you use this code add me somewhere is your credits
+
 ### Credits
 ```
 Overkill10117
