@@ -1,5 +1,6 @@
 package com.Overkill10117.command.commands.Events;
 
+import com.Overkill10117.command.commands.Fun.SpamCommand;
 import com.Overkill10117.command.commands.Fun.TriviaCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;

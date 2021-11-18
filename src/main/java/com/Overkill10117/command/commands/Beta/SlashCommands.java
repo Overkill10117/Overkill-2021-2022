@@ -1,6 +1,11 @@
 package com.Overkill10117.command.commands.Beta;
 
+import com.Overkill10117.Config;
 import com.Overkill10117.command.CommandContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import me.duncte123.botcommons.messaging.EmbedUtils;
+import me.duncte123.botcommons.web.WebUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
@@ -9,8 +14,10 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -38,8 +45,10 @@ public class  SlashCommands extends ListenerAdapter {
                 prune(event);
                 break;
             case "spam":
-                Message message = (Message) Objects.requireNonNull(event.getOption("message")).getAsMessageChannel();
-                spam(event, Objects.requireNonNull(event.getOption("content")).getAsString(), message);
+                spam(event);
+                break;
+            case "meme":
+                meme(event);
                 break;
             default:
                 event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
@@ -131,124 +140,37 @@ public class  SlashCommands extends ListenerAdapter {
                 .queue();
     }
 
-    public void spam(SlashCommandEvent event, String content, Message ctx) {
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
-        event.reply(ctx.getContentRaw()).queue();
+    public void spam(SlashCommandEvent event) {// This is configured to be optional so check for null
+        final long guildID = event.getGuild().getIdLong();
+        String prefix = Config.get("prefix");
 
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setTitle("Spam");
+            embedBuilder.setColor(Color.cyan);
+            embedBuilder.setDescription("click the button to spam");
 
+            event.replyEmbeds(embedBuilder.build()).addActionRows(
+                    ActionRow.of(
+                            net.dv8tion.jda.api.interactions.components.Button.secondary(event.getMember().getUser().getId() + ":spam", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
 
+            return;
+    }
 
+    public void meme(SlashCommandEvent event) {
+        WebUtils.ins.getJSONObject("https://apis.duncte123.me/meme").async((json) -> {
+            if (!json.get("success").asBoolean()) {
+                event.reply("Something went wrong, try again later").queue();
+                System.out.println(json);
+                return;
+            }
 
+            final JsonNode data = json.get("data");
+            final String title = data.get("title").asText();
+            final String url = data.get("url").asText();
+            final String image = data.get("image").asText();
+            final EmbedBuilder embed = EmbedUtils.embedImageWithTitle(title, url, image);
 
-
-
+            event.replyEmbeds(embed.build()).queue();
+        });
     }
 }

@@ -88,6 +88,10 @@ public class CommandManager {
         );
         Bot.commands.addCommands(
                 new CommandData("spam", "Make the bot spam alot use this wisely or else...")
+
+        );
+        Bot.commands.addCommands(
+                new CommandData("meme", "meme")
         );
 
         // Send the new set of commands to discord, this will override any existing global commands with the new set provided here
