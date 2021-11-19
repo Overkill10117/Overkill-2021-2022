@@ -165,7 +165,7 @@ public class  SlashCommands extends ListenerAdapter {
 
         event.replyEmbeds(embedBuilder.build()).addActionRows(
                 ActionRow.of(
-                        net.dv8tion.jda.api.interactions.components.Button.secondary(event.getMember().getUser().getId() + ":spam", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
+                        Button.secondary(event.getMember().getUser().getId() + ":spam", "Spam"))).queue();
 
         return;
     }
@@ -246,9 +246,9 @@ public class  SlashCommands extends ListenerAdapter {
         EmbedBuilder embedBuilder;
         System.out.println(event.getSelectedOptions().get(0).getValue());
         if (TriviaCommand.storeAnswer.containsKey(event.getUser())) {
-            String answer = TriviaCommand.storeAnswer.get(event.getUser());
-            String question = TriviaCommand.storeQuestion.get(event.getUser());
-            String difficulty = TriviaCommand.storeDifficulty.get(event.getUser());
+            String answer = storeAnswer.get(event.getUser());
+            String question = storeQuestion.get(event.getUser());
+            String difficulty = storeDifficulty.get(event.getUser());
 
             if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
                 event.reply("Correct answer!!!!\n" +
@@ -256,18 +256,18 @@ public class  SlashCommands extends ListenerAdapter {
                         "Question: `" + question + "`").queue();
                 event.deferEdit().queue();
                 event.getMessage().delete().queue();
-                TriviaCommand.storeAnswer.remove(event.getUser());
+                storeAnswer.remove(event.getUser());
             } else {
                 EmbedBuilder e = new EmbedBuilder();
                 e.setTitle("Incorrect answer");
                 e.setFooter("A correct answer gives you \uD83E\uDE99 ");
                 e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
-                        "**\nThe correct answer is " + TriviaCommand.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
+                        "**\nThe correct answer is " + storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
                 event.replyEmbeds(e.build()).queue();
                 event.getMessage().delete().queue();
-                TriviaCommand.storeAnswer.remove(event.getUser());
-                TriviaCommand.storeQuestion.remove(event.getUser());
-                TriviaCommand.storeDifficulty.remove(event.getUser());
+                storeAnswer.remove(event.getUser());
+                storeQuestion.remove(event.getUser());
+                storeDifficulty.remove(event.getUser());
 
                 event.deferEdit().queue();
             }

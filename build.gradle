@@ -2,6 +2,7 @@ plugins {
     id'java'
     id'application'
     id'com.github.johnrengelman.shadow' version '6.0.0'
+    id "com.heroku.sdk.heroku-gradle" version "2.0.0"
 }
 
 mainClassName = 'com.Overkill10117.Bot'
@@ -31,6 +32,7 @@ repositories {
         url "https://m2.chew.pro/releases"
     }
 }
+
 
 jar {
     manifest {
@@ -63,6 +65,8 @@ dependencies {
     implementation group: 'com.google.oauth-client', name: 'google-oauth-client-jetty', version: '1.32.1'
     implementation group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev581-1.25.0'
     implementation group: 'com.github.shinixsensei-dev', name: 'OpenTDB4j', version: '1.1.0'
+    implementation 'com.heroku.sdk:heroku-deploy:3.0.4'
+    testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
 }
 
 compileJava.options.encoding = 'UTF-8'
