@@ -12,11 +12,9 @@ import com.Overkill10117.command.commands.Mod.PollCommand;
 import com.Overkill10117.command.commands.Mod.ReactionRoleCommand;
 import com.Overkill10117.command.commands.Music.*;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
-import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -110,7 +108,7 @@ public class CommandManager {
         }
 
         cmdNames.add(cmd.getName());
-        System.out.println(Bot.ANSI_BLUE + "Loaded the ign " + cmd.getName() + " -> " + cmd.getClass() + Bot.ANSI_RESET);
+        System.out.println(Bot.ANSI_BLUE + "Loaded the ," + cmd.getName() + " -> " + cmd.getClass() + Bot.ANSI_RESET);
         commands.add(cmd);
     }
 

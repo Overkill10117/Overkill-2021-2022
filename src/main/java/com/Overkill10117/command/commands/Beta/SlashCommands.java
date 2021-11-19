@@ -241,4 +241,36 @@ public class  SlashCommands extends ListenerAdapter {
         storeDifficulty.put(event.getUser(), obj.getDifficulty());
         storeAnswer.put(event.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
     }
+    @Override
+    public void onSelectionMenu(@NotNull SelectionMenuEvent event) {
+        EmbedBuilder embedBuilder;
+        System.out.println(event.getSelectedOptions().get(0).getValue());
+        if (SlashCommands.storeAnswer.containsKey(event.getUser())) {
+            String answer = SlashCommands.storeAnswer.get(event.getUser());
+            String question = SlashCommands.storeQuestion.get(event.getUser());
+            String difficulty = SlashCommands.storeDifficulty.get(event.getUser());
+
+            if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
+                event.reply("Correct answer!!!!\n" +
+                        "You got \uD83E\uDE99for getting the correct answer!\n" +
+                        "Question: `" + question + "`").queue();
+                event.deferEdit().queue();
+                event.getMessage().delete().queue();
+                SlashCommands.storeAnswer.remove(event.getUser());
+            } else {
+                EmbedBuilder e = new EmbedBuilder();
+                e.setTitle("Incorrect answer");
+                e.setFooter("A correct answer gives you \uD83E\uDE99 ");
+                e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
+                        "**\nThe correct answer is " + SlashCommands.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
+                event.replyEmbeds(e.build()).queue();
+                event.getMessage().delete().queue();
+                SlashCommands.storeAnswer.remove(event.getUser());
+                SlashCommands.storeQuestion.remove(event.getUser());
+                SlashCommands.storeDifficulty.remove(event.getUser());
+
+                event.deferEdit().queue();
+            }
+        }
+    }
 }

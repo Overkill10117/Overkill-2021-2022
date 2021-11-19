@@ -4,21 +4,17 @@ import com.Overkill10117.command.commands.Utils.ReactionRoleData;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.BotCommons;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
-import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.InteractionHook;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,6 +143,10 @@ public class Listener extends ListenerAdapter {
             return;
         }
 
+        if (raw.equalsIgnoreCase("hi")) {
+            event.getChannel().sendMessage("lol").queue();
+        }
+
         if(raw.equalsIgnoreCase(",ghelp"))
         {
             event.getChannel().sendMessage("<:tada:294906617378504704> Giveaway help: <:tada:294906617378504704>\n"
@@ -203,8 +203,7 @@ public class Listener extends ListenerAdapter {
 
     }
     public static void shutdown(GuildMessageReceivedEvent event, boolean isOwner) {
-        LOGGER.info("The bot " + event.getAuthor().getAsMention() + " is shutting down.\n" +
-                "Thank you for using General_Hello's Code!!!");
+        LOGGER.info("The bot " + event.getAuthor().getAsMention() + " is shutting down.\n");
 
         event.getChannel().sendMessage("Shutting down... " ).queue();
         event.getChannel().sendMessage("Bot successfully shutdown! ").queue();
