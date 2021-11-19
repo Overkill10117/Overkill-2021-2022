@@ -66,7 +66,23 @@ dependencies {
     implementation group: 'com.google.apis', name: 'google-api-services-sheets', version: 'v4-rev581-1.25.0'
     implementation group: 'com.github.shinixsensei-dev', name: 'OpenTDB4j', version: '1.1.0'
     implementation 'com.heroku.sdk:heroku-deploy:3.0.4'
+    implementation 'junit:junit:4.13.2'
     testImplementation 'org.spockframework:spock-core:2.0-groovy-3.0'
 }
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
 
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
+
+gradle.taskGraph.whenReady {
+    taskGraph ->
+        if (taskGraph.hasTask(stage)) {
+            test.enabled = false
+        }
+}
 compileJava.options.encoding = 'UTF-8'

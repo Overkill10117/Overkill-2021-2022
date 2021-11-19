@@ -236,41 +236,9 @@ public class  SlashCommands extends ListenerAdapter {
         embedBuilder.addField("Difficulty: ", obj.getDifficulty(), true);
         embedBuilder.addField("Question: ", event.getUser().getAsMention() + " " + msg, false);
         embedBuilder.setColor(Color.cyan);
-        event.replyEmbeds(embedBuilder.build()).addActionRow(menu.build()).queue();
+        event.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(menu.build()).queue();
         storeQuestion.put(event.getUser(), msg);
         storeDifficulty.put(event.getUser(), obj.getDifficulty());
         storeAnswer.put(event.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
-    }
-    @Override
-    public void onSelectionMenu(@NotNull SelectionMenuEvent event) {
-        EmbedBuilder embedBuilder;
-        System.out.println(event.getSelectedOptions().get(0).getValue());
-        if (TriviaCommand.storeAnswer.containsKey(event.getUser())) {
-            String answer = storeAnswer.get(event.getUser());
-            String question = storeQuestion.get(event.getUser());
-            String difficulty = storeDifficulty.get(event.getUser());
-
-            if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
-                event.reply("Correct answer!!!!\n" +
-                        "You got \uD83E\uDE99for getting the correct answer!\n" +
-                        "Question: `" + question + "`").queue();
-                event.deferEdit().queue();
-                event.getMessage().delete().queue();
-                storeAnswer.remove(event.getUser());
-            } else {
-                EmbedBuilder e = new EmbedBuilder();
-                e.setTitle("Incorrect answer");
-                e.setFooter("A correct answer gives you \uD83E\uDE99 ");
-                e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
-                        "**\nThe correct answer is " + storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
-                event.replyEmbeds(e.build()).queue();
-                event.getMessage().delete().queue();
-                storeAnswer.remove(event.getUser());
-                storeQuestion.remove(event.getUser());
-                storeDifficulty.remove(event.getUser());
-
-                event.deferEdit().queue();
-            }
-        }
     }
 }

@@ -19,7 +19,7 @@ public class OnSelectionMenu extends ListenerAdapter {
             String difficulty = TriviaCommand.storeDifficulty.get(event.getUser());
 
             if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
-                event.getChannel().sendMessage("Correct answer!!!!\n" +
+                event.reply("Correct answer!!!!\n" +
                         "You got \uD83E\uDE99for getting the correct answer!\n" +
                         "Question: `" + question + "`").queue();
                 event.deferEdit().queue();
@@ -31,7 +31,7 @@ public class OnSelectionMenu extends ListenerAdapter {
                 e.setFooter("A correct answer gives you \uD83E\uDE99 ");
                 e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
                         "**\nThe correct answer is " + TriviaCommand.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
-                event.getChannel().sendMessageEmbeds(e.build()).queue();
+                event.replyEmbeds(e.build()).queue();
                 event.getMessage().delete().queue();
                 TriviaCommand.storeAnswer.remove(event.getUser());
                 TriviaCommand.storeQuestion.remove(event.getUser());

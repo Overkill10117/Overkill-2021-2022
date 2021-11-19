@@ -1,0 +1,1 @@
+web: java -jar build/libs/Overkill10117.jar

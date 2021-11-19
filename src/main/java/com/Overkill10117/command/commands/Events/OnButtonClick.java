@@ -152,7 +152,7 @@ public class OnButtonClick extends ListenerAdapter {
             case "spamm":
                 event.getChannel().sendMessage("spam").setActionRows(
                         ActionRow.of(
-                                Button.secondary(event.getMember().getUser().getId() + ":spamm", "spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true))
+                                Button.secondary(event.getMember().getUser().getId() + ":spamm", "spam again").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true))
                         )
                 ).queue();
         }
