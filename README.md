@@ -22,7 +22,7 @@ Made in java with JDA and JDA-utils. Not yet 24/7.
 ### Coming Soon Features
 - [ ] Improve Buttons and Dropboxes
 - [ ] Create game commands
-- [ ] Slash Commands
+- [x] Slash Commands
 - [x] Improve Welcome Command
 
 # Remember:
