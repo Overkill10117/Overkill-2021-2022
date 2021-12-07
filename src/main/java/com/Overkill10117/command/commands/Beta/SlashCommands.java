@@ -2,31 +2,27 @@ package com.Overkill10117.command.commands.Beta;
 
 import Requests.OpenTDB;
 import com.Overkill10117.Config;
-import com.Overkill10117.command.CommandContext;
-import com.Overkill10117.command.commands.Fun.TriviaCommand;
 import com.Overkill10117.command.commands.Utils.UtilNum;
 import com.fasterxml.jackson.databind.JsonNode;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
-import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
-import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 public class  SlashCommands extends ListenerAdapter {
@@ -63,9 +59,8 @@ public class  SlashCommands extends ListenerAdapter {
                 break;
             case "trivia":
                 trivia(event);
-                break;
             default:
-                event.reply("I can't handle that command right now :(").setEphemeral(true).queue();
+                event.reply("This Command is not available :(").setEphemeral(true).queue();
         }
     }
 
@@ -91,6 +86,15 @@ public class  SlashCommands extends ListenerAdapter {
                 // fallthrough delete the prompt message with our buttons
             case "delete":
                 event.getHook().deleteOriginal().queue();
+            case "spam":
+
+                int x = 0;
+
+                while (x < 200) {
+                    event.getChannel().sendMessageFormat("spam").queue();
+                    x++;
+                    break;
+                }
         }
     }
 
@@ -188,7 +192,7 @@ public class  SlashCommands extends ListenerAdapter {
         });
     }
 
-    public void trivia(SlashCommandEvent event) {
+    public void trivia(SlashCommandEvent ctx) {
         OpenTDB obj = new OpenTDB();
 
         obj.getTrivia();
@@ -197,7 +201,7 @@ public class  SlashCommands extends ListenerAdapter {
         System.out.println(obj.getCorrectAnswer());
 
         String[] incorrectAnswers = obj.incorrectAnswers;
-        for (int i = 0; i < obj.incorrectAnswers.length ; i++) {
+        for (int i = 0; i < obj.incorrectAnswers.length; i++) {
             System.out.println(obj.incorrectAnswers[i]);
         }
 
@@ -219,7 +223,7 @@ public class  SlashCommands extends ListenerAdapter {
         arrayList.add(obj.getCorrectAnswer());
         int size = arrayList.size();
         while (x < size) {
-            int random = UtilNum.randomNum(0, size-1 - (x));
+            int random = UtilNum.randomNum(0, size - 1 - (x));
             String choice = arrayList.get(random).replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
             System.out.println(choice);
 
@@ -234,43 +238,12 @@ public class  SlashCommands extends ListenerAdapter {
         embedBuilder.setTitle("Trivia!!!");
         embedBuilder.addField("Category: ", obj.getCategory(), true);
         embedBuilder.addField("Difficulty: ", obj.getDifficulty(), true);
-        embedBuilder.addField("Question: ", event.getUser().getAsMention() + " " + msg, false);
+        embedBuilder.addField("Question: ", ctx.getUser().getAsMention() + " " + msg, false);
         embedBuilder.setColor(Color.cyan);
-        event.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(menu.build()).queue();
-        storeQuestion.put(event.getUser(), msg);
-        storeDifficulty.put(event.getUser(), obj.getDifficulty());
-        storeAnswer.put(event.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
-    }
-    @Override
-    public void onSelectionMenu(@NotNull SelectionMenuEvent event) {
-        EmbedBuilder embedBuilder;
-        System.out.println(event.getSelectedOptions().get(0).getValue());
-        if (SlashCommands.storeAnswer.containsKey(event.getUser())) {
-            String answer = SlashCommands.storeAnswer.get(event.getUser());
-            String question = SlashCommands.storeQuestion.get(event.getUser());
-            String difficulty = SlashCommands.storeDifficulty.get(event.getUser());
+        ctx.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(menu.build()).queue();
+        storeQuestion.put(ctx.getUser(), msg);
+        storeDifficulty.put(ctx.getUser(), obj.getDifficulty());
+        storeAnswer.put(ctx.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
 
-            if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
-                event.reply("Correct answer!!!!\n" +
-                        "You got \uD83E\uDE99for getting the correct answer!\n" +
-                        "Question: `" + question + "`").queue();
-                event.deferEdit().queue();
-                event.getMessage().delete().queue();
-                SlashCommands.storeAnswer.remove(event.getUser());
-            } else {
-                EmbedBuilder e = new EmbedBuilder();
-                e.setTitle("Incorrect answer");
-                e.setFooter("A correct answer gives you \uD83E\uDE99 ");
-                e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
-                        "**\nThe correct answer is " + SlashCommands.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
-                event.replyEmbeds(e.build()).queue();
-                event.getMessage().delete().queue();
-                SlashCommands.storeAnswer.remove(event.getUser());
-                SlashCommands.storeQuestion.remove(event.getUser());
-                SlashCommands.storeDifficulty.remove(event.getUser());
-
-                event.deferEdit().queue();
-            }
-        }
     }
 }

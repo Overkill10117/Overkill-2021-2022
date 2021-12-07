@@ -31,7 +31,7 @@ public class SpamCommand implements ICommand {
 
             channel.sendMessageEmbeds(embedBuilder.build()).setActionRows(
                     ActionRow.of(
-                            net.dv8tion.jda.api.interactions.components.Button.secondary(ctx.getMember().getUser().getId() + ":spamm", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
+                            net.dv8tion.jda.api.interactions.components.Button.secondary(ctx.getMember().getUser().getId() + ":again", "Spam").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true)))).queue();
 
             return;
         }

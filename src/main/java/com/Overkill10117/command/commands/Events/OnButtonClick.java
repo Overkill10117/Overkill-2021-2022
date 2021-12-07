@@ -43,10 +43,10 @@ public class OnButtonClick extends ListenerAdapter {
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessageEmbeds(
                         embedBuilder
-                        .setTitle("General Commands")
+                        .setTitle("General Commands :thumbsup:")
                 .setColor(Color.ORANGE)
-                                .addField(Config.get("prefix") + "help", "help command", true)
-                                .addField(Config.get("prefix") + "invite", "Invite the bot to your server NOW!!", true)
+                                .addField(Config.get("prefix") + "help :information_source: ", "help command", true)
+                                .addField(Config.get("prefix") + "invite :robot: ", "Invite the bot to your server NOW!!", true)
 
                 .setFooter("Type " + prefix + " help [command name] to see what they do")
                         .build()).setActionRows(
@@ -54,24 +54,24 @@ public class OnButtonClick extends ListenerAdapter {
                                 Button.secondary(event.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
                 break;
             case "music":
                 event.getMessage().delete().queue();
                 event.getChannel().sendMessageEmbeds(
                         embedBuilder
-                                .setTitle("Music Commands")
+                                .setTitle("Music Commands :notes:")
                                 .setColor(Color.ORANGE)
-                                .addField(Config.get("prefix") + "join", "Puts the bot in a voice channel", true)
-                                .addField(Config.get("prefix") + "leave", "leaves the current voice channel", true)
-                                .addField(Config.get("prefix") + "nowplaying", "Shows the currently playing song", true)
-                                .addField(Config.get("prefix") + "play", "Plays a song\n" +
+                                .addField(Config.get("prefix") + "join :inbox_tray: ", "Puts the bot in a voice channel", true)
+                                .addField(Config.get("prefix") + "leave :outbox_tray: ", "leaves the current voice channel", true)
+                                .addField(Config.get("prefix") + "nowplaying :arrow_forward: ", "Shows the currently playing song", true)
+                                .addField(Config.get("prefix") + "play :loud_sound: ", "Plays a song\n" +
                                         "Usage: `,play <youtube link or song name>`", true)
-                                .addField(Config.get("prefix") + "queue", "shows the queued up songs", true)
-                                .addField(Config.get("prefix") + "repeat", "Loops the current song", true)
-                                .addField(Config.get("prefix") + "skip", "skips the current track", true)
-                                .addField(Config.get("prefix") + "stop", "Stops the current song and clears the queue", true)
+                                .addField(Config.get("prefix") + "queue :scroll: ", "shows the queued up songs", true)
+                                .addField(Config.get("prefix") + "repeat :repeat: ", "Loops the current song", true)
+                                .addField(Config.get("prefix") + "skip :track_next: ", "skips the current track", true)
+                                .addField(Config.get("prefix") + "stop :x: ", "Stops the current song and clears the queue", true)
 
 
                                 .setFooter("Type " + Config.get("prefix") + " help [command name] to see what they do")
@@ -80,7 +80,7 @@ public class OnButtonClick extends ListenerAdapter {
                                 Button.secondary(event.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
                 break;
             case "fun":
@@ -89,20 +89,20 @@ public class OnButtonClick extends ListenerAdapter {
                         embedBuilder
                                 .setTitle("Fun Commands")
                                 .setColor(Color.ORANGE)
-                                .addField(Config.get("prefix") + "meme", "Shows a random meme", true)
-                                .addField(Config.get("prefix") + "joke", "Shows a random joke", true)
-                                .addField(Config.get("prefix") + "spam", "spam", true)
-                                .addField(Config.get("prefix") + "trivia", "a trivia message!!!\n" +
+                                .addField(Config.get("prefix") + "meme :joy:", "Shows a random meme", true)
+                                .addField(Config.get("prefix") + "joke :rofl: ", "Shows a random joke", true)
+                                .addField(Config.get("prefix") + "spam :scream: ", "spam", true)
+                                .addField(Config.get("prefix") + "trivia :thinking:", "a trivia message!!!\n" +
                                         "Usage: `" + Config.get("prefix") + "trivia`", true)
-                                .addField(Config.get("prefix") + "8ball", "8ball [question]", true)
-                                .addField(Config.get("prefix") + "autospam", "autospam automatically spams on the amount of spams\n" +
+                                .addField(Config.get("prefix") + "8ball :8ball: ", "8ball [question]", true)
+                                .addField(Config.get("prefix") + "autospam :scream_cat: ", "autospam automatically spams on the amount of spams\n" +
                                         "Usage: ,autospam [number] [word]", true)
-                                .addField(Config.get("prefix") + "targetspam", "Targets the mentioned user on the dm" +
+                                .addField(Config.get("prefix") + "targetspam  :scream: :scream_cat:", "Targets the mentioned user on the dm" +
                                         "Usage: `" + Config.get("prefix") + "targetspam`\n"
                                         + "Parameter: `-h | [Number] @Mention(s)`\n"
                                         + "[Number]: Spam an amount of spams.\n"
                                         + "@Mention(s): Spam spams to mentioned member(s) in dm.\n", true)
-                                .addField(Config.get("prefix") + "fight", "Fights with user\n" +
+                                .addField(Config.get("prefix") + "fight :punch: ", "Fights with user\n" +
                                         "Usage: ,fight [person]", true)
 
 
@@ -112,7 +112,7 @@ public class OnButtonClick extends ListenerAdapter {
                                 Button.secondary(event.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
                 break;
             case "mod":
@@ -121,14 +121,14 @@ public class OnButtonClick extends ListenerAdapter {
                         embedBuilder
                                 .setTitle("Moderation Commands")
                                 .setColor(Color.ORANGE)
-                                .addField(Config.get("prefix") + "about", "About the bot", true)
-                                .addField(Config.get("prefix") + "avatar", "giveaway help", true)
-                                .addField(Config.get("prefix") + "serverinfo", "Shows info about that server\n" +
+                                .addField(Config.get("prefix") + "about :information_source: ", "About the bot", true)
+                                .addField(Config.get("prefix") + "avatar :information_source: ", "giveaway help", true)
+                                .addField(Config.get("prefix") + "serverinfo :information_source: ", "Shows info about that server\n" +
                                         "Usage: `,serverinfo`\n" +
                                         "Parameter: `-h | [ID] | null`", true)
-                                .addField(Config.get("prefix") + "user", "Get info about the specified user\n" +
+                                .addField(Config.get("prefix") + "user :information_source: ", "Get info about the specified user\n" +
                                         "`,user [mentioned member]`", true)
-                                .addField(Config.get("prefix") + "mods", "This command is for getting a list of mods in this server."
+                                .addField(Config.get("prefix") + "mods :information_source: ", "This command is for getting a list of mods in this server."
                                         + "Command Usage: `,mods`\n", true)
 
                                 .setFooter("Type " + Config.get("prefix") + " help [command name] to see what they do")
@@ -137,22 +137,13 @@ public class OnButtonClick extends ListenerAdapter {
                                 Button.secondary(event.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                                Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
                 break;
-            case "spam":
-
-                int x = 0;
-
-                while (x<200) {
-                    event.getChannel().sendMessageFormat("spam").queue();
-                    x++;
-                    break;
-                }
-            case "spamm":
+            case "again":
                 event.getChannel().sendMessage("spam").setActionRows(
                         ActionRow.of(
-                                Button.secondary(event.getMember().getUser().getId() + ":spamm", "spam again").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true))
+                                Button.secondary(event.getMember().getUser().getId() + ":again", "spam again").withEmoji(Emoji.fromEmote("spam", Long.parseLong("862895295239028756"), true))
                         )
                 ).queue();
         }

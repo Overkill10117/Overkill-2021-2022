@@ -34,12 +34,12 @@ public class HelpCommand implements ICommand {
             EmbedBuilder embedBuilder = new EmbedBuilder();
             embedBuilder.setTitle("Category");
             embedBuilder.setColor(Color.cyan);
-            embedBuilder.addField(" | General","Basic Commands", false);
-            embedBuilder.addField(" | Music ","Basic music commands.", false);
-            embedBuilder.addField(" | Fun","Fun stuff.", false);
-            embedBuilder.addField(" | Mod","Moderation", false);
+            embedBuilder.addField(" | General","Basic Commands :thumbsup: ", false);
+            embedBuilder.addField(" | Music ","Music Commands :notes: ", false);
+            embedBuilder.addField(" | Fun","Fun Commands :zany_face: ", false);
+            embedBuilder.addField(" | Mod","Moderation Commands :exclamation: ", false);
 
-            embedBuilder.setFooter("Type " + prefix + " help [group name] to see their commands");
+            embedBuilder.setFooter("Type " + prefix + " help [Command Name] to see their commands");
 
             boolean disableOrEnable = !ctx.getMember().hasPermission(Permission.MANAGE_SERVER) && !ctx.getMember().getRoles().contains(ctx.getGuild().getRoleById(888627140046749697L));
 
@@ -48,7 +48,7 @@ public class HelpCommand implements ICommand {
                             Button.secondary(ctx.getMember().getUser().getId() + ":general", "General").withEmoji(Emoji.fromEmote("general", Long.parseLong("862895295239028756"), true)),
                             Button.secondary(ctx.getMember().getUser().getId() + ":music", "Music").withEmoji(Emoji.fromEmote("music", Long.parseLong("862895295239028756"), true)),
                             Button.secondary(ctx.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
-                            Button.secondary(ctx.getMember().getUser().getId() + ":mod", "Mod").withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
+                            Button.secondary(ctx.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                             Button.secondary(ctx.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
             return;
         }
