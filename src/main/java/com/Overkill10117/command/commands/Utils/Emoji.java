@@ -18,6 +18,7 @@ public class Emoji {
     public final static String INFORMATION = EmojiParser.parseToUnicode(":information_source:");
     public final static String BAN = EmojiParser.parseToUnicode(":hammer:");
     public final static String SCREAM = EmojiParser.parseToUnicode(":scream:");
+    public final static String CATSCREAM = EmojiParser.parseToUnicode(":scream_cat:");
     public final static String YAY = EmojiParser.parseToUnicode("");
 
     /* Faces */
