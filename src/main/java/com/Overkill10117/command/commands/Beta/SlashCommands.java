@@ -2,7 +2,13 @@ package com.Overkill10117.command.commands.Beta;
 
 import Requests.OpenTDB;
 import com.Overkill10117.Config;
+import com.Overkill10117.command.Database.DatabaseManager;
+import com.Overkill10117.command.commands.Fun.TriviaCommand;
 import com.Overkill10117.command.commands.Utils.UtilNum;
+import com.Overkill10117.command.commands.currency.Data;
+import com.Overkill10117.command.commands.currency.Levels.LevelPointManager;
+import com.Overkill10117.command.commands.currency.UserUserOverkill;
+import com.Overkill10117.command.commands.currency.Work.WorkCommand;
 import com.fasterxml.jackson.databind.JsonNode;
 import me.duncte123.botcommons.messaging.EmbedUtils;
 import me.duncte123.botcommons.web.WebUtils;
@@ -12,6 +18,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
+import net.dv8tion.jda.api.events.interaction.SelectionMenuEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.InteractionHook;
@@ -19,17 +26,19 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
 import net.dv8tion.jda.api.interactions.components.selections.SelectionMenu;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class  SlashCommands extends ListenerAdapter {
+
     public static HashMap<User, String> storeAnswer = new HashMap<>();
     public static HashMap<User, String> storeQuestion = new HashMap<>();
     public static HashMap<User, String> storeDifficulty = new HashMap<>();
-    private Object CommandContext;
 
     @Override
     public void onSlashCommand(SlashCommandEvent event) {
@@ -193,57 +202,112 @@ public class  SlashCommands extends ListenerAdapter {
     }
 
     public void trivia(SlashCommandEvent ctx) {
-        OpenTDB obj = new OpenTDB();
+        try {
+            OpenTDB obj = new OpenTDB();
+            if (ctx.getUser().isBot()) {
+                ctx.getChannel().sendMessage("lol").queue();
+            }
 
-        obj.getTrivia();
+            obj.getTrivia();
 
-        System.out.println(obj.getQuestion());
-        System.out.println(obj.getCorrectAnswer());
+            String[] incorrectAnswers = obj.incorrectAnswers;
 
-        String[] incorrectAnswers = obj.incorrectAnswers;
-        for (int i = 0; i < obj.incorrectAnswers.length; i++) {
-            System.out.println(obj.incorrectAnswers[i]);
+            SelectionMenu.Builder menu = SelectionMenu.create("menu:class")
+                    .setPlaceholder("Choose the correct answer") // shows the placeholder indicating what this menu is for
+                    .setRequiredRange(1, 1);
+
+            int x = 0;
+            ArrayList<String> arrayList = new ArrayList<>();
+
+            while (x < incorrectAnswers.length) {
+                arrayList.add(incorrectAnswers[x]);
+                x++;
+            }
+
+            x = 0;
+
+            arrayList.add(obj.getCorrectAnswer());
+            int size = arrayList.size();
+            while (x < size) {
+                int random = UtilNum.randomNum(0, size - 1 - (x));
+                String choice = arrayList.get(random).replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
+                menu.addOption(choice, choice);
+                arrayList.remove(choice);
+
+                x++;
+            }
+
+            String msg = obj.getQuestion().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
+            EmbedBuilder embedBuilder = new EmbedBuilder();
+            embedBuilder.setTitle("Trivia!!!");
+            embedBuilder.addField("Category: ", obj.getCategory(), true);
+            embedBuilder.addField("Difficulty: ", obj.getDifficulty(), true);
+            embedBuilder.addField("Question: ", ctx.getUser().getAsMention() + " " + msg, false);
+            embedBuilder.setColor(Color.cyan);
+            embedBuilder.setFooter("A correct answer will give you at least 1,000 credits!!!");
+            ctx.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(menu.build()).queue();
+            storeQuestion.put(ctx.getUser(), msg);
+            storeDifficulty.put(ctx.getUser(), obj.getDifficulty());
+            storeAnswer.put(ctx.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
+        } catch (Exception e) {
+            ctx.getChannel().sendMessage("The only options are easy, medium, and hard!").queue();
         }
 
+    }
 
-        SelectionMenu.Builder menu = SelectionMenu.create("menu:class")
-                .setPlaceholder("Choose the correct answer") // shows the placeholder indicating what this menu is for
-                .setRequiredRange(1, 1);
-
+    @Override
+    public void onSelectionMenu(@NotNull SelectionMenuEvent event) {
         int x = 0;
-        ArrayList<String> arrayList = new ArrayList<>();
 
-        while (x < incorrectAnswers.length) {
-            arrayList.add(incorrectAnswers[x]);
-            x++;
+        System.out.println(event.getSelectedOptions().get(0).getValue());
+        if (TriviaCommand.storeAnswer.containsKey(event.getUser())) {
+            String answer = TriviaCommand.storeAnswer.get(event.getUser());
+            String question = TriviaCommand.storeQuestion.get(event.getUser());
+            String difficulty = TriviaCommand.storeDifficulty.get(event.getUser());
+            int reward = 2_000;
+
+            int multiplier = difficulty.equals("medium") ? 3 : 1;
+            multiplier = difficulty.equals("hard") ? 5 : multiplier;
+
+            reward = reward * multiplier;
+
+            if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
+                if (WorkCommand.job.containsKey(event.getUser())) {
+                    UserUserOverkill bankUser = Data.userUserUserOverkillHashMap.get(event.getJDA().getSelfUser());
+                    int bankCredits = bankUser.getCredits();
+
+                    int minRobOrFine = 0;
+                    int maxRobOrFine = 200_000;
+
+                    if (maxRobOrFine > bankCredits) {
+                        maxRobOrFine = bankCredits;
+                    }
+
+                    int randomNum = UtilNum.randomNum(minRobOrFine, maxRobOrFine);
+
+                    DecimalFormat formatter = new DecimalFormat("#,###.00");
+                    DatabaseManager.INSTANCE.setCredits(event.getUser().getIdLong(), randomNum);
+                    DatabaseManager.INSTANCE.setCredits(event.getJDA().getSelfUser().getIdLong(), (-randomNum));
+
+                    EmbedBuilder e = new EmbedBuilder();
+                    e.setTitle("Great Work!");
+                    e.setColor(Color.green);
+                    e.setDescription("You were given " + " `" + formatter.format(randomNum) + "` for an hour of work.");
+                    e.setFooter("Working as a teacher");
+                    event.getHook().deleteOriginal().queue();
+                    event.deferEdit().queue();
+                    event.getChannel().sendMessageEmbeds(e.build()).setActionRow(event.getSelectionMenu().asDisabled()).queue();
+                } else {
+                    event.getChannel().sendMessage("Correct answer!!!!\n" +
+                            "You got \uD83E\uDE99 " + reward + " for getting the correct answer!\n" +
+                            "Question: `" + question + "`").queue();
+                    LevelPointManager.feed(event.getUser(), 25);
+                    DatabaseManager.INSTANCE.setCredits(event.getUser().getIdLong(), reward);
+                    event.deferEdit().queue();
+                    event.getMessage().delete().queue();
+                }
+                TriviaCommand.storeAnswer.remove(event.getUser());
+            }
         }
-
-        x = 0;
-
-        arrayList.add(obj.getCorrectAnswer());
-        int size = arrayList.size();
-        while (x < size) {
-            int random = UtilNum.randomNum(0, size - 1 - (x));
-            String choice = arrayList.get(random).replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
-            System.out.println(choice);
-
-            menu.addOption(choice, choice);
-            arrayList.remove(choice);
-
-            x++;
-        }
-
-        String msg = obj.getQuestion().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&");
-        EmbedBuilder embedBuilder = new EmbedBuilder();
-        embedBuilder.setTitle("Trivia!!!");
-        embedBuilder.addField("Category: ", obj.getCategory(), true);
-        embedBuilder.addField("Difficulty: ", obj.getDifficulty(), true);
-        embedBuilder.addField("Question: ", ctx.getUser().getAsMention() + " " + msg, false);
-        embedBuilder.setColor(Color.cyan);
-        ctx.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(menu.build()).queue();
-        storeQuestion.put(ctx.getUser(), msg);
-        storeDifficulty.put(ctx.getUser(), obj.getDifficulty());
-        storeAnswer.put(ctx.getUser(), obj.getCorrectAnswer().replace("&quot;", "'").replace("&#039;", "'").replace("&Uuml;", "ü").replace("&amp;", "&"));
-
     }
 }

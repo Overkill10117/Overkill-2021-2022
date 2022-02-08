@@ -2,15 +2,19 @@ package com.Overkill10117;
 
 import com.Overkill10117.command.CommandContext;
 import com.Overkill10117.command.ICommand;
+import com.Overkill10117.command.commands.Beta.Command;
 import com.Overkill10117.command.commands.Fun.*;
 import com.Overkill10117.command.commands.General.HelpCommand;
 import com.Overkill10117.command.commands.General.InviteMeCommand;
 import com.Overkill10117.command.commands.Info.*;
-import com.Overkill10117.command.commands.Mod.AnnounceCommand;
-import com.Overkill10117.command.commands.Mod.GiveawayCommand;
-import com.Overkill10117.command.commands.Mod.PollCommand;
-import com.Overkill10117.command.commands.Mod.ReactionRoleCommand;
+import com.Overkill10117.command.commands.Mod.*;
 import com.Overkill10117.command.commands.Music.*;
+import com.Overkill10117.command.commands.currency.BalanceCommand;
+import com.Overkill10117.command.commands.currency.Levels.RankCommand;
+import com.Overkill10117.command.commands.currency.RegisterCommand;
+import com.Overkill10117.command.commands.currency.SetNameCommand;
+import com.Overkill10117.command.commands.currency.UpdateCoinsCommand;
+import com.Overkill10117.command.commands.currency.Work.WorkCommand;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -52,6 +56,14 @@ public class CommandManager {
         addCommand(new InfoUserCommand());
         addCommand(new ModsCommand());
         addCommand(new FightCommand());
+        addCommand(new CreateChannelCommand());
+        addCommand(new RegisterCommand());
+        addCommand(new UpdateCoinsCommand());
+        addCommand(new RankCommand());
+        addCommand(new SetNameCommand());
+        addCommand(new WorkCommand());
+        addCommand(new BalanceCommand());
+        addCommand(new Command());
 
         addCommand(new JoinCommand());
         addCommand(new LeaveCommand());

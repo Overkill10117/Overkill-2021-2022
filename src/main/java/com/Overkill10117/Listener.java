@@ -1,5 +1,6 @@
 package com.Overkill10117;
 
+import com.Overkill10117.command.commands.Beta.Command;
 import com.Overkill10117.command.commands.Utils.ReactionRoleData;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.BotCommons;
@@ -9,6 +10,7 @@ import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -97,6 +99,16 @@ public class Listener extends ListenerAdapter {
                 event.getJDA().getSelfUser().getAsMention(), event.getGuild().getName());
 
         Objects.requireNonNull(event.getGuild().getDefaultChannel()).sendMessage(useGuildSpecificSettingsInstead).queue();
+        System.out.printf("I joined %s", event.getGuild().getName());
+    }
+
+    @Override
+    public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+        final String useGuildSpecificSettingsInstead = String.format("Good bye %s leaving %s",
+                event.getJDA().getSelfUser().getAsMention(), event.getGuild().getName());
+
+        Objects.requireNonNull(event.getGuild().getDefaultChannel()).sendMessage(useGuildSpecificSettingsInstead).queue();
+        System.out.printf("I Left %s", event.getGuild().getName());
     }
 
     @Override
@@ -144,14 +156,18 @@ public class Listener extends ListenerAdapter {
         }
 
         if (raw.equalsIgnoreCase("hi")) {
-            event.getChannel().sendMessage("lol").queue();
+            event.getChannel().sendMessage("hello").queue();
+        }
+
+        if (raw.equalsIgnoreCase("hello")) {
+            event.getChannel().sendMessage("hi").queue();
         }
 
         if(raw.equalsIgnoreCase(",ghelp"))
         {
             event.getChannel().sendMessage("<:tada:294906617378504704> Giveaway help: <:tada:294906617378504704>\n"
                     + "`,ghelp` - this message\n"
-                    + "`,start <seconds> [item]` - starts a giveway. Ex: `!gstart 180` for a 3 minute giveaway\n"
+                    + "`,start <seconds> [item]` - starts a giveway. Ex: `,gstart 180` for a 3 minute giveaway\n"
                     + "`,reroll <messageid>` - rerolls a winner for the giveaway on the provided message\n\n"
                     + "Commands require Manage Server permission to use\n"
                     + "Don't include <> nor []; <> means required, [] means optional").queue();

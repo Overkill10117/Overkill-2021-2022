@@ -1,9 +1,13 @@
 package com.Overkill10117.command.commands.Events;
 
 import com.Overkill10117.Config;
+import com.Overkill10117.command.commands.currency.BalanceCommand;
+import com.Overkill10117.command.commands.currency.Data;
+import com.Overkill10117.command.commands.currency.Levels.LevelPointManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Emoji;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
@@ -11,6 +15,8 @@ import net.dv8tion.jda.api.interactions.components.Button;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class OnButtonClick extends ListenerAdapter {
     @Override
@@ -32,7 +38,11 @@ public class OnButtonClick extends ListenerAdapter {
             return;
         }
 
-        boolean disableOrEnable = !event.getMember().hasPermission(Permission.MANAGE_SERVER) && !event.getMember().getRoles().contains(event.getGuild().getRoleById(888627140046749697L));
+        boolean disableOrEnable = false;
+        try {
+            disableOrEnable = !event.getMember().hasPermission(Permission.MANAGE_SERVER) && !event.getMember().getRoles().contains(event.getGuild().getRoleById(888627140046749697L));
+        } catch (Exception ignored) {
+        }
 
         switch (type) {
             case "end":
@@ -139,6 +149,44 @@ public class OnButtonClick extends ListenerAdapter {
                                 Button.secondary(event.getMember().getUser().getId() + ":fun", "Fun").withEmoji(Emoji.fromEmote("fun", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":mod", "Mod").withDisabled(disableOrEnable).withEmoji(Emoji.fromEmote("mod", Long.parseLong("862895295239028756"), true)),
                                 Button.secondary(event.getMember().getUser().getId() + ":end", "Cancel").withEmoji(Emoji.fromEmote("end", Long.parseLong("862895295239028756"), true)))).queue();
+                break;
+            case "rank":
+                try{
+                    User member = event.getJDA().getUserById(id[2]);
+                    ByteArrayOutputStream baos = LevelPointManager.getLevelPointCard(member).getByteArrayOutputStream();
+                    event.getMessage().delete().queue();
+                    event.getChannel().sendFile(baos.toByteArray(), member.getName() + "-stats.png").queue();
+                }
+                catch(Exception ignored){
+                }
+                break;
+            case "accept":
+                String arrow = "<a:arrow_1:862525611465113640>";
+
+                event.getMessage().delete().queue();
+                EmbedBuilder em = new EmbedBuilder().setTitle("Stored data").setFooter("Press the Accept button if you accept the data that will be stored!\n");
+                em.setDescription("The bot stores the following data:\n" +
+                        arrow + " Reads all sent messages in the server the bot is in.\n" +
+                        arrow + " Reads all the messages you sent to the bot.\n" +
+                        arrow + " Reads your ignite coins.\n" +
+                        arrow + " Reads your user name, profile picture, nitro status, and user id.\n" +
+                        arrow + " Reads all the permissions you have on that server.");
+                event.getChannel().sendMessageEmbeds(em.build()).setActionRow(
+                        Button.primary("0000:yes", "yes").withEmoji(Emoji.fromEmote("verify", Long.parseLong("863204252188672000"), true))
+                ).queue();
+                event.deferEdit().queue();
+                break;
+            case "yes":
+                event.getMessage().delete().queue();
+                event.getChannel().sendMessage("<a:thanks:863989523461177394> Thank you for accepting the rules and data that will be stored.").queue();
+                event.getChannel().sendMessage("<a:question:863989523368247346> For your Ignite Coins balance, may we ask for your first and last, real name? For example, **Nathan Tan** or **John Sy**").queue();
+                Data.progress.put(event.getUser(), 1);
+                break;
+            case "balance":
+                Integer balance = BalanceCommand.dataInTheSky.get(event.getUser().getIdLong());
+                event.reply("Your balance is **" + balance + "**").setEphemeral(true).queue();
+                BalanceCommand.dataInTheSky.remove(event.getUser().getIdLong());
+                event.getMessage().editMessageEmbeds(event.getMessage().getEmbeds().get(0)).setActionRow(event.getButton().asDisabled()).queue();
                 break;
             case "again":
                 event.getChannel().sendMessage("spam").setActionRows(

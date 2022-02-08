@@ -1,7 +1,10 @@
 package com.Overkill10117;
 
+import com.Overkill10117.command.Database.DatabaseManager;
 import com.Overkill10117.command.commands.Beta.SlashCommands;
+import com.Overkill10117.command.commands.Events.OnApiRequest;
 import com.Overkill10117.command.commands.Events.OnButtonClick;
+import com.Overkill10117.command.commands.Events.OnPrivateMessage;
 import com.Overkill10117.command.commands.Events.OnSelectionMenu;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import me.duncte123.botcommons.messaging.EmbedUtils;
@@ -23,9 +26,11 @@ public class Bot {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static CommandListUpdateAction commands;
+    public static JDA jda;
 
 
     private Bot() throws LoginException {
+        DatabaseManager.INSTANCE.getPrefix(-1);
         JDA jda = JDABuilder.createLight(Config.get("token"), EnumSet.noneOf(GatewayIntent.class))
                 .addEventListeners(new SlashCommands())
                 .build();// slash commands don't need any intents;
@@ -60,6 +65,8 @@ public class Bot {
                 .addEventListeners(new OnButtonClick())
                 .addEventListeners(new OnSelectionMenu())
                 .addEventListeners(new SlashCommands())
+                .addEventListeners(new OnPrivateMessage())
+                .addEventListeners(new OnApiRequest())
                 .setStatus(OnlineStatus.DO_NOT_DISTURB)
                 .setChunkingFilter(ChunkingFilter.ALL)
                 .setActivity(Activity.playing("Being Programmed || type ,help"))

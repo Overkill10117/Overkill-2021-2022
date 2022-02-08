@@ -1,8 +1,12 @@
 package com.Overkill10117.command.commands.Utils;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class UtilNum {
+
     /**
      * Generate a number between start and end
      * @param start
@@ -65,7 +69,7 @@ public class UtilNum {
     public static int getLineCount(String filepath) throws IOException {
         int lines = 0;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)));
+            BufferedReader reader = new BufferedReader(new FileReader(filepath));
             while (reader.readLine() != null) { lines ++; }
             reader.close();
         } catch (FileNotFoundException e) {
@@ -76,4 +80,3 @@ public class UtilNum {
         return lines;
     }
 }
-
