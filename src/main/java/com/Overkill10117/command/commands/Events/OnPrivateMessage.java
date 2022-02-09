@@ -3,6 +3,7 @@ package com.Overkill10117.command.commands.Events;
 import com.Overkill10117.Config;
 import com.Overkill10117.command.Database.DatabaseManager;
 import com.Overkill10117.command.commands.Info.InfoUserCommand;
+import com.Overkill10117.command.commands.Utils.Util;
 import com.Overkill10117.command.commands.currency.Data;
 import com.Overkill10117.command.commands.currency.UpdateCoinsCommand;
 import com.Overkill10117.command.commands.currency.UserUserOverkill;
@@ -10,12 +11,15 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class OnPrivateMessage extends ListenerAdapter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(OnPrivateMessage.class);
     @Override
     public void onPrivateMessageReceived(@NotNull PrivateMessageReceivedEvent event) {
         EmbedBuilder embedBuilder = new EmbedBuilder().setColor(InfoUserCommand.randomColor());
@@ -51,6 +55,8 @@ public class OnPrivateMessage extends ListenerAdapter {
                 }
 
                 Data.realNameUserUserOverkillHashMap.put(oldAnswers.get(0), user);
+
+                LOGGER.info("New account created for " + user.getDiscordUser().getName() + " with the name of " + user.getRealName());
             }
             return;
         }
@@ -68,6 +74,11 @@ public class OnPrivateMessage extends ListenerAdapter {
                 }
                 event.getChannel().sendMessage("The message was not found!").queue();
             }));
+            return;
         }
+
+        if (event.getAuthor().isBot()) return;
+        Util.sendOwnerDM(event.getAuthor().getAsTag() + " sent me a private message with the following content.\n" +
+                event.getMessage().getContentRaw());
     }
 }

@@ -5,24 +5,32 @@ import net.dv8tion.jda.api.entities.User;
 import org.jetbrains.annotations.NotNull;
 
 public class UserUserOverkill implements Comparable <UserUserOverkill>{
-    private String userPhoneUserName;
+    private String realName;
     private Integer balance;
     private Integer credits;
 
     private final User discordUser;
 
-    public UserUserOverkill (String userPhoneUserName, User discordUser, Integer credits) {
-        this.userPhoneUserName = userPhoneUserName;
+    public String getRealName() {
+        return realName;
+    }
+
+    public UserUserOverkill (String userUserUserOverkillName, User discordUser, Integer credits) {
+        this.realName = userUserUserOverkillName;
         this.discordUser = discordUser;
         this.credits = credits;
     }
 
     public String getUserUserOverkillName() {
-        return userPhoneUserName;
+        return realName;
     }
 
     public void setUserUserOverkillName(String userPhoneUserName) {
-        this.userPhoneUserName = userPhoneUserName;
+        this.realName = userPhoneUserName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public Integer getBalance() {
@@ -46,5 +54,5 @@ public class UserUserOverkill implements Comparable <UserUserOverkill>{
     public int compareTo(UserUserOverkill upu){
         return upu.credits - this.credits;
     }
-
 }
+

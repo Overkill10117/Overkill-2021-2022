@@ -52,24 +52,6 @@ public class SQLiteDataSource implements DatabaseManager {
                             "UserName TEXT NOT NULL, " +
                             "Credits INTEGER DEFAULT 1000," +
                             "PRIMARY KEY(UserId) ) WITHOUT ROWID",
-                    "CREATE TABLE IF NOT EXISTS RPGData (" +
-                            "UserId INTEGER," +
-                            "Shekels INTEGER," +
-                            "Bank INTEGER," +
-                            "BankLimit INTEGER," +
-                            "Level INTEGER," +
-                            "Health INTEGER" +
-                            ")",
-                    "CREATE TABLE IF NOT EXISTS MarriageData (" +
-                            "MainUser INTEGER," +
-                            "Wife INTEGER," +
-                            "Son INTEGER," +
-                            "XP INTEGER," +
-                            "HouseXP INTEGER," +
-                            "Happiness INTEGER," +
-                            "Love INTEGER," +
-                            "House INTEGER" +
-                            ")",
                     "CREATE TABLE IF NOT EXISTS CommandCount (" +
                             "name VARCHAR(30)," +
                             "count INTEGER" +
@@ -94,7 +76,6 @@ public class SQLiteDataSource implements DatabaseManager {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public String getPrefix(long guildId) {

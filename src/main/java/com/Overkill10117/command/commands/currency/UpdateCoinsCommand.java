@@ -48,7 +48,7 @@ public class UpdateCoinsCommand implements ICommand {
             return null;
         }
         final String spreadsheetId = "1YHa3CJufkw0XujsQYBpR6fKZJmMQl-uNF_ixwbef9mI";
-        final String range = "Ref Sheet TRIAL!B3:F156";
+        final String range = "Sheet1!A1:L1000";
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, SheetsQuickstart.JSON_FACTORY, SheetsQuickstart.getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
                 .build();

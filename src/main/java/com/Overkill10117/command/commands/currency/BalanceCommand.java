@@ -53,9 +53,9 @@ public class BalanceCommand implements ICommand {
         embedBuilder.setThumbnail("https://images-ext-2.discordapp.net/external/dSmBwljIOT0xUFDxjc5_KNUZx9g3dNviWTCkCZ6oleY/https/cdn.discordapp.com/emojis/718138332982280272.gif");
         DecimalFormat formatter = new DecimalFormat("#,###.00");
         embedBuilder.setTitle(user.getName() + "'s Balance").setFooter("Hohoho Merry Christmas 🎄");
-        embedBuilder.setDescription(" Ignite Coins: **" + (balance == null ? "You are not in the coin database**\n" :"Press the button for your ignite coins**\n") +
+        embedBuilder.setDescription(
                  " Credits: ** " + formatter.format(userPhoneUser.getCredits()) + " credits**\n");
-        ctx.getChannel().sendMessageEmbeds(embedBuilder.build()).setActionRow(Button.of(ButtonStyle.PRIMARY, user.getIdLong() + ":balance", "View Coins").withEmoji(Emoji.fromEmote("ignt_coins", 905999722374905857L, false)).withDisabled(balance == null)).queue();
+        ctx.getChannel().sendMessageEmbeds(embedBuilder.build()).queue();
 
         if (balance != null) {
             dataInTheSky.put(user.getIdLong(), balance);
