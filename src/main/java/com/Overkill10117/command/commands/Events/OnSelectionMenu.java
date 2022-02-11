@@ -39,25 +39,24 @@ public class OnSelectionMenu extends ListenerAdapter {
                 .build();
         int x = 0;
 
-        System.out.println(event.getSelectedOptions().get(0).getValue());
         if (TriviaCommand.storeAnswer.containsKey(event.getUser())) {
             String answer = TriviaCommand.storeAnswer.get(event.getUser());
             String question = TriviaCommand.storeQuestion.get(event.getUser());
             String difficulty = TriviaCommand.storeDifficulty.get(event.getUser());
-            int reward = 2_000;
+            int reward = 500;
 
             int multiplier = difficulty.equals("medium") ? 3 : 1;
             multiplier = difficulty.equals("hard") ? 5 : multiplier;
 
             reward = reward * multiplier;
-
+            System.out.println(WorkCommand.job.containsKey(event.getUser()));
             if (event.getSelectedOptions().get(0).getValue().equals(answer)) {
                 if (WorkCommand.job.containsKey(event.getUser())) {
                     UserUserOverkill bankUser = Data.userUserUserOverkillHashMap.get(event.getJDA().getSelfUser());
                     int bankCredits = bankUser.getCredits();
 
-                    int minRobOrFine = 0;
-                    int maxRobOrFine = 200_000;
+                    int minRobOrFine = 1_000;
+                    int maxRobOrFine = 10_000;
 
                     if (maxRobOrFine > bankCredits) {
                         maxRobOrFine = bankCredits;
@@ -66,9 +65,7 @@ public class OnSelectionMenu extends ListenerAdapter {
                     int randomNum = UtilNum.randomNum(minRobOrFine, maxRobOrFine);
 
                     DecimalFormat formatter = new DecimalFormat("#,###.00");
-                    DatabaseManager.INSTANCE.setCredits(event.getUser().getIdLong(), randomNum);
-                    DatabaseManager.INSTANCE.setCredits(event.getJDA().getSelfUser().getIdLong(), (-randomNum));
-
+                    UserUserOverkill.addShekels(event.getUser().getIdLong(), randomNum);
                     EmbedBuilder e = new EmbedBuilder();
                     e.setTitle("Great Work!");
                     e.setColor(Color.green);
@@ -76,49 +73,40 @@ public class OnSelectionMenu extends ListenerAdapter {
                     e.setFooter("Working as a teacher");
                     event.getHook().deleteOriginal().queue();
                     event.deferEdit().queue();
+                    WorkCommand.job.remove(event.getUser());
                     event.getChannel().sendMessageEmbeds(e.build()).setActionRow(event.getSelectionMenu().asDisabled()).queue();
                 } else {
                     event.getChannel().sendMessage("Correct answer!!!!\n" +
-                            "You got \uD83E\uDE99 " + reward + " for getting the correct answer!\n" +
+                            "You got " + " " + reward + " for getting the correct answer!\n" +
                             "Question: `" + question + "`").queue();
-                    LevelPointManager.feed(event.getUser(), 25);
-                    DatabaseManager.INSTANCE.setCredits(event.getUser().getIdLong(), reward);
+                    UserUserOverkill.addShekels(event.getUser().getIdLong(), reward);
                     event.deferEdit().queue();
                     event.getMessage().delete().queue();
                 }
                 TriviaCommand.storeAnswer.remove(event.getUser());
             } else {
                 if (WorkCommand.job.containsKey(event.getUser())) {
-
-                    UserUserOverkill bankUser = Data.userUserUserOverkillHashMap.get(event.getJDA().getSelfUser());
-                    int bankCredits = bankUser.getCredits();
-
                     int minRobOrFine = 0;
-                    int maxRobOrFine = 80_000;
-
-                    if (maxRobOrFine > bankCredits) {
-                        maxRobOrFine = bankCredits;
-                    }
-
+                    int maxRobOrFine = 2_000;
                     int randomNum = UtilNum.randomNum(minRobOrFine, maxRobOrFine);
 
                     DecimalFormat formatter = new DecimalFormat("#,###.00");
-                    DatabaseManager.INSTANCE.setCredits(event.getUser().getIdLong(), randomNum);
-                    DatabaseManager.INSTANCE.setCredits(event.getJDA().getSelfUser().getIdLong(), (-randomNum));
+                    UserUserOverkill.addShekels(event.getUser().getIdLong(), randomNum);
 
                     EmbedBuilder e = new EmbedBuilder();
                     e.setTitle("TERRIBLE Work!");
                     e.setColor(Color.red);
                     e.setDescription("You lost the mini-game because the answer you chose wasn't correct.\n" +
-                            "You were given " + " `" + formatter.format(randomNum) + "` for a sub-par hour of work.");
+                            "You were given " + formatter.format(randomNum) + "` for a sub-par hour of work.");
                     e.setFooter("Working as a teacher");
                     event.getHook().deleteOriginal().queue();
                     event.deferEdit().queue();
+                    WorkCommand.job.remove(event.getUser());
                     event.getChannel().sendMessageEmbeds(e.build()).setActionRow(event.getSelectionMenu().asDisabled()).queue();
                 } else {
                     EmbedBuilder e = new EmbedBuilder();
                     e.setTitle("Incorrect answer");
-                    e.setFooter("A correct answer gives you \uD83E\uDE99 " + reward);
+                    e.setFooter("A correct answer gives you " + reward + " credits");
                     e.addField("Question: `" + question + "`\n" + "Difficulty: **" + difficulty +
                             "**\nThe correct answer is " + TriviaCommand.storeAnswer.get(event.getUser()), "Better luck next time", false).setColor(Color.RED);
                     event.getChannel().sendMessageEmbeds(e.build()).queue();
@@ -128,6 +116,9 @@ public class OnSelectionMenu extends ListenerAdapter {
                 TriviaCommand.storeAnswer.remove(event.getUser());
                 TriviaCommand.storeQuestion.remove(event.getUser());
                 TriviaCommand.storeDifficulty.remove(event.getUser());
+                try {
+                    WorkCommand.job.remove(event.getUser());
+                } catch(Exception ignored) {}
             }
         }
         while (x < event.getSelectedOptions().size()) {
